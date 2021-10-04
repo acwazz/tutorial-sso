@@ -1,0 +1,4 @@
+#!/bin/sh
+set -eu
+hypercorn --config file:hypercorn_config_dev.py sso_service.main:app
+exec "$@"

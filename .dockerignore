@@ -1,0 +1,8 @@
+.vscode
+.vscode/
+.idea/
+secrets.toml
+settings.toml
+.coverage
+.pytest_cache/
+htmlcov/

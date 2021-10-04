@@ -77,6 +77,15 @@ async def delete_user(user_id: str, service: RegisteredService = Depends(check_a
     return {"operation": True}
 
 
+@router.get("/users/{user_id}", response_model=ReadUser, tags=["User Services"])
+async def retrieve_user(user_id: str, service: RegisteredService = Depends(check_api_key)):
+    """Elimina un utente"""
+    inst = await user_repo.retrieve(user_id)
+    if not inst:
+        raise NotFound("User not found")
+    return inst
+
+
 @router.post("/auth/signin", response_model=AuthenticatedUser, tags=["Authentication Services"])
 async def sign_in(credentials: Credentials, service: RegisteredService = Depends(check_api_key)):
     return await sso.signin(**credentials.dict())

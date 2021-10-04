@@ -26,6 +26,14 @@ class UserToken(EmbeddedModel):
     is_valid: bool
     created: datetime.datetime = Field(default_factory=datetime.datetime.utcnow)
 
+    def is_valid_access_token(self):
+        eol = self.created + datetime.timedelta(seconds=self.access_lifetime)
+        return datetime.datetime.utcnow() <= eol and self.is_valid
+    
+    def is_valid_refresh_token(self):
+        eol = self.created + datetime.timedelta(seconds=self.refresh_lifetime)
+        return datetime.datetime.utcnow() <= eol
+
 
 class User(Model):
     username: str
@@ -75,6 +83,11 @@ class UserRepository(BaseRepository):
         if not inst:
             raise NotFound("User not found.")
         return inst
+    
+    async def invalidate_token(self, user: User) -> User:
+        user.token.is_valid = False
+        return await self.db.engine.save(user)
+
 
 
 

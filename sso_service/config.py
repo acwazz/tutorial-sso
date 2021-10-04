@@ -4,7 +4,7 @@ from passlib.context import CryptContext
 
 password_context = CryptContext(schemes=["bcrypt"], deprecated=["auto"])
 
-APP_VERSION = "1.0.0"
+APP_VERSION = "1.1.0"
 DEBUG = settings.get("DEBUG", False)
 MONGO_URL = settings.get("MONGO_URL", "mongodb://localhost:27017/lemonSSO")
 MONGO_DATABASE = settings.get("MONGO_DATABASE", "lemonSSO")

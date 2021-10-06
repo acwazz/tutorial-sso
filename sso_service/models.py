@@ -5,13 +5,12 @@ from odmantic import Model, Field, EmbeddedModel
 from odmantic.query import QueryExpression
 from pydantic import SecretStr
 from .database import BaseRepository
-from .utils.exceptions import NotFound, NotValid
+from .utils.exceptions import NotFound, Conflict
 from .config import password_context
 
 
-class NotUnique(NotValid):
-    pass
-
+class NotUnique(Conflict):
+    default_message = "Field value is not unique"
 
 
 def generate_token_value():
@@ -87,9 +86,6 @@ class UserRepository(BaseRepository):
     async def invalidate_token(self, user: User) -> User:
         user.token.is_valid = False
         return await self.db.engine.save(user)
-
-
-
 
 user_repo = UserRepository()
 

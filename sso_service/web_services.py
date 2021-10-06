@@ -12,9 +12,7 @@ router = APIRouter(prefix="/api/v1")
 
 @router.get("/echo/", response_model=dict, name="Echo Service", tags=["Info"])
 def echo_service():
-    """
-    Se consumato ritorna una risposta in caso il backend sia in uptime.
-    """
+    """Se consumato ritorna una risposta in caso il backend sia in uptime."""
     return {"message": "Everything works fine! 🚀", "origin": "sso-service"}
 
 
@@ -38,7 +36,7 @@ class OperationExit(BaseModel):
 
 @router.delete("/registered-services/{registered_service_id}", response_model=OperationExit, tags=["Admin"])
 async def delete_registered_service(registered_service_id: str, auth: bool = Depends(check_api_key_admin)):
-    """elimina l'account di un servizio di integrazione"""
+    """Elimina l'account di un servizio di integrazione"""
     await registered_service_repo.destroy(registered_service_id)
     return {"operation": True}
 
@@ -79,7 +77,7 @@ async def delete_user(user_id: str, service: RegisteredService = Depends(check_a
 
 @router.get("/users/{user_id}", response_model=ReadUser, tags=["User Services"])
 async def retrieve_user(user_id: str, service: RegisteredService = Depends(check_api_key)):
-    """Elimina un utente"""
+    """Ritorna il dettaglio utente"""
     inst = await user_repo.retrieve(user_id)
     if not inst:
         raise NotFound("User not found")
@@ -88,6 +86,7 @@ async def retrieve_user(user_id: str, service: RegisteredService = Depends(check
 
 @router.post("/auth/signin", response_model=AuthenticatedUser, tags=["Authentication Services"])
 async def sign_in(credentials: Credentials, service: RegisteredService = Depends(check_api_key)):
+    """Effettua il login dell'utente"""
     return await sso.signin(**credentials.dict())
 
 
@@ -97,12 +96,14 @@ class AuthTokenReq(BaseModel):
 
 @router.post("/auth/signout", response_model=OperationExit, tags=["Authentication Services"])
 async def sign_out(req: AuthTokenReq, service: RegisteredService = Depends(check_api_key)):
+    """Invalida l'autenticazione di un utente"""
     signout = await sso.signout(req.access_token)
     return {"operation": signout}
 
 
 @router.post("/auth/verify", response_model=OperationExit, tags=["Authentication Services"])
 async def verify(req: AuthTokenReq, service: RegisteredService = Depends(check_api_key)):
+    """Verifica la validità di un token di autenticazione"""
     try:
         await sso.verify(req.access_token)
         return {"operation": True}
@@ -112,6 +113,7 @@ async def verify(req: AuthTokenReq, service: RegisteredService = Depends(check_a
 
 @router.post("/auth/sso", response_model=ReadUser, tags=["Authentication Services"])
 async def single_sign_on(req: AuthTokenReq, service: RegisteredService = Depends(check_api_key)):
+    """Fornito l'access token ritorna gli attributi di un utente"""
     return await sso.verify(req.access_token)
 
 
@@ -121,5 +123,6 @@ class RefreshReq(BaseModel):
 
 @router.post("/auth/refresh", response_model=AuthenticatedUser, tags=["Authentication Services"])
 async def refresh(refresh: RefreshReq, service: RegisteredService = Depends(check_api_key)):
+    """Permette il refresh dell'autenticazione"""
     inst = await sso.refresh(refresh.refresh_token)
     return inst

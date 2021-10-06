@@ -1,6 +1,3 @@
-"""
-Modulo generale e utility di gestione del database
-"""
 import os
 import datetime
 from loguru import logger

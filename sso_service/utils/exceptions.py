@@ -83,7 +83,7 @@ class ExceptionResponse(WebException):
         super().__init__(reason=reason, message=message, exc_code=exc_code, is_critical=is_critical)
 
 
-# Main exception handlers
+# Exception handlers
 
 async def web_exception_handler(_: Request, exc: WebException):
     return DJSONResponse(

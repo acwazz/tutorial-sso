@@ -7,9 +7,9 @@ os.environ['ENVVAR_PREFIX_FOR_DYNACONF'] = "false"
 from dynaconf import settings
 
 # Getting Env Vars
-SERVER_BINDS = str(settings.get("YAB_SERVER_BINDS", "localhost:8000")).split(";")
-LOGLEVEL = settings.get("YAB_SERVER_LOGLEVEL", "info")
-WORKERS = settings.get("YAB_SERVER_WORKERS_NUM", (multiprocessing.cpu_count() * 2) + 1)
+SERVER_BINDS = str(settings.get("SERVER_BINDS", "localhost:8000")).split(";")
+LOGLEVEL = settings.get("SERVER_LOGLEVEL", "info")
+WORKERS = settings.get("SERVER_WORKERS_NUM", (multiprocessing.cpu_count() * 2) + 1)
 
 
 bind = SERVER_BINDS

@@ -23,7 +23,7 @@ class DJSONResponse(ORJSONResponse):
     def body_metadata(self):
         return {
             "error": self.status_code >= 400,
-            "version": settings.get("YAB_APP_VERSION"),
+            "version": settings.get("APP_VERSION"),
             "code": self.body_meta_code,
             "message": self.body_meta_message
         }

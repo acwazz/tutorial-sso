@@ -3,7 +3,7 @@ from pydantic import BaseModel
 from fastapi import APIRouter, Depends
 from .utils.auth import check_api_key, check_api_key_admin
 from .utils.exceptions import NotFound, Forbidden
-from .models import RegisteredService, registered_service_repo, user_repo, User
+from .models import RegisteredService, registered_service_repo, user_repo
 from .serializers import WriteRegisterdService, ReadUser, WriteUser, AuthenticatedUser, Credentials, UpdateUser
 from sso_service import sso
 

@@ -85,7 +85,7 @@ class ExceptionResponse(WebException):
 
 # Main exception handlers
 
-async def web_exception_handler(request: Request, exc: WebException):
+async def web_exception_handler(_: Request, exc: WebException):
     return DJSONResponse(
         content=exc.reason, 
         status_code=exc.status_code,
@@ -95,7 +95,7 @@ async def web_exception_handler(request: Request, exc: WebException):
     )
 
 
-async def starlette_http_exception_handler(request: Request, exc: StarletteHTTPException):
+async def starlette_http_exception_handler(_: Request, exc: StarletteHTTPException):
     return DJSONResponse(
         content=str(exc.detail), 
         status_code=exc.status_code, 
@@ -104,7 +104,7 @@ async def starlette_http_exception_handler(request: Request, exc: StarletteHTTPE
     )
 
 
-async def validation_exception_handler(request: Request, exc: RequestValidationError):
+async def validation_exception_handler(_: Request, exc: RequestValidationError):
     return DJSONResponse(
         content=str(exc), 
         status_code=422, 

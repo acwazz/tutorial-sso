@@ -90,6 +90,15 @@ async def sign_in(credentials: Credentials, service: RegisteredService = Depends
     return await sso.signin(**credentials.dict())
 
 
+class UserExistenceRequest(BaseModel):
+    username: str
+
+@router.post("/auth/ues", response_model=ReadUser, tags=["Authentication Services"])
+async def user_existence_service(payload: UserExistenceRequest, service: RegisteredService = Depends(check_api_key)):
+    """Verifica l'esistenza di un utente"""
+    return await user_repo.retrive_by_username(payload.username)
+
+
 class AuthTokenReq(BaseModel):
     access_token: str
 

@@ -19,6 +19,23 @@ async def signout(token: str):
     return True
 
 
+async def ues(username:str):
+    try:
+        user = await user_repo.retrive_by_username(username)
+        if not user.token.is_valid_access_token():
+            await user_repo.invalidate_token(user)
+            raise Exception("Token expired or not valid.")
+        return {
+            "user": user,
+            "auth": {
+                "token": user.token.access_value,
+                "refresh": user.token.refresh_value
+            }
+        }
+    except Exception as e:
+        raise Forbidden(str(e))
+
+
 async def verify(access_token: str):
     try:
         user = await user_repo.retrieve_by_access_token(access_token)
